@@ -1,0 +1,21 @@
+{
+  "modListVersion": 2,
+  "modList": [{
+    "modid": "AutoWalk",
+    "name": "Auto Walk",
+    "description": "A less cheaty way of fast travel",
+    "version": "1.0.0",
+    "mcversion": "1.7.10",
+    "url": "austinv11.com",
+    "updateUrl": "",
+    "authorList": ["austinv11"],
+    "credits": "Made by austinv11, idea from Pawn",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": "",
+    "requiredMods": ["Forge"],
+    "dependencies": [],
+    "dependants": [],
+    "useDependencyInformation": false
+  }]
+}
