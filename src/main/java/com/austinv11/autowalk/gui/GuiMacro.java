@@ -18,7 +18,7 @@ public class GuiMacro extends GuiScreen {
 	public HashMap<String,GuiTextField> textFields = new HashMap<String,GuiTextField>();
 	
 	public int textY = height/2 + 3*25;
-	public int startTextX = (int) (width/2) + 5*25;
+	public int startTextX = (int) (width/2 + 2*25);
 	
 	public int buttonY = height/2 + 5*25;
 	public int startButtonX = (int) (width/2 + 4.5*25);
@@ -36,7 +36,7 @@ public class GuiMacro extends GuiScreen {
 	@Override
 	public void initGui() {
 		super.initGui();
-		textFields.put("macros", getTextbox(startTextX, textY, 80, 20, TickHandler.macros));
+		textFields.put("macros", getTextbox(startTextX, textY, 320, 20, TickHandler.macros));
 		buttonList.add(new GuiButton(0, startButtonX, buttonY, 80, 20, StatCollector.translateToLocal("gui.button.cancel")));
 		buttonList.add(new GuiButton(1, startButtonX+100, buttonY, 80, 20, StatCollector.translateToLocal("gui.button.ok")));
 	}

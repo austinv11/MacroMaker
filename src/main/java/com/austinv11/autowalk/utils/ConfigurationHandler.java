@@ -1,5 +1,6 @@
 package com.austinv11.autowalk.utils;
 
+import com.austinv11.autowalk.reference.Config;
 import com.austinv11.autowalk.reference.Reference;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -28,7 +29,7 @@ public class ConfigurationHandler {
 	private static void loadConfiguration(){
 		try{//Load & read properties
 			config.load();
-			
+			Config.showKeysOnHUD = config.get("Misc", "showKeysOnHUD", false, "If enabled, all pressed keys will be overlaid on the in game HUD").getBoolean(false);
 		}catch (Exception e){//Log exception
 			Logger.warn("Config exception!");
 			Logger.warn(e.getStackTrace());

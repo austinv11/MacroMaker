@@ -1,11 +1,14 @@
 package com.austinv11.autowalk.event;
 
 import com.austinv11.autowalk.AutoWalk;
+import com.austinv11.autowalk.gui.KeyOverlay;
 import com.austinv11.autowalk.init.Keybindings;
+import com.austinv11.autowalk.reference.Config;
 import com.austinv11.autowalk.reference.Reference;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.input.Keyboard;
 
 public class KeyHandler {
 	
@@ -17,5 +20,13 @@ public class KeyHandler {
 			Minecraft.getMinecraft().thePlayer.openGui(AutoWalk.instance, Reference.Guis.MACRO.ordinal(), Minecraft.getMinecraft().thePlayer.worldObj, (int)Minecraft.getMinecraft().thePlayer.posX, (int)Minecraft.getMinecraft().thePlayer.posY, (int)Minecraft.getMinecraft().thePlayer.posZ);
 		else if (Keybindings.activateMacros.isPressed())
 			TickHandler.isMacroInUse = !TickHandler.isMacroInUse;
+		if (Config.showKeysOnHUD) {
+			if (Keyboard.getEventKeyState())
+				try {
+					KeyOverlay.keys.offer(new Object[]{Keyboard.getKeyName(Keyboard.getEventKey()).toUpperCase(), KeyOverlay.KEY_LIFE_LENGTH});
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
 	}
 }
