@@ -1,6 +1,7 @@
 package com.austinv11.autowalk.event;
 
 import com.austinv11.autowalk.init.Keybindings;
+import com.austinv11.autowalk.utils.ReflectionUtil;
 import com.austinv11.autowalk.utils.Rotation;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -169,8 +170,17 @@ public class TickHandler {
 	}
 	
 	public static int getKey(String character) throws IllegalAccessException, NoSuchFieldException {
-		Field key = KeyEvent.class.getField("VK_"+character.toUpperCase());
-		return key.getInt(null);
+		if (ReflectionUtil.doesClassHaveDeclaredField(KeyEvent.class, "VK_"+character.toUpperCase())) {
+			Field key = KeyEvent.class.getField("VK_"+character.toUpperCase());
+			return key.getInt(null);
+		} else {//Special cases
+			int key = 0;
+			if (character.toUpperCase().contains("SHIFT"))
+				key = KeyEvent.VK_SHIFT;
+			else if (character.toUpperCase().contains("META"))
+				key = KeyEvent.VK_META;
+			return key;
+		}
 	}
 	
 	private void setYaw() {

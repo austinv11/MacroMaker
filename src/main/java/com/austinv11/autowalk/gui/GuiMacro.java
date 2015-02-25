@@ -74,7 +74,7 @@ public class GuiMacro extends GuiScreen {
 		boolean cont = false;
 		for (GuiTextField text : textFields.values()) {
 			text.textboxKeyTyped(eventChar, eventKey);
-			cont = text.isFocused() || cont;
+			cont = !text.isFocused() || cont;
 		}
 		if (cont)
 			if (Config.listenOnMacroScreen)
