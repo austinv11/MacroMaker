@@ -1,5 +1,6 @@
 package com.austinv11.autowalk.event;
 
+import com.austinv11.autowalk.init.Keybindings;
 import com.austinv11.autowalk.utils.Rotation;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -20,7 +21,12 @@ public class TickHandler {
 	public static int Y;
 	public static int Z;
 	
-	public static boolean isInUse = false;
+	public static boolean isPathfinderInUse = false;
+	public static boolean isMacroInUse = false;
+	
+	private boolean wasMacroUsed = false;
+	
+	public static String macros;
 	
 	public Robot robot;
 	public boolean isKeyDown = false;
@@ -30,7 +36,7 @@ public class TickHandler {
 	private int inactivityTicker = 0;
 	private int cooldown = 0;
 	
-	private static boolean reset = false;
+	private static boolean pathfindReset = false;
 	
 	public TickHandler() {
 		try {
@@ -42,20 +48,41 @@ public class TickHandler {
 	
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
-		if (reset) {
+		if (isMacroInUse && !wasMacroUsed) {
 			try {
-				isInUse = false;
+				int[] keys = parseMacros();
+				for (int i = 0; i < keys.length; i++) {
+					robot.keyPress(keys[i]);
+				}
+				wasMacroUsed = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (!isMacroInUse && wasMacroUsed) {
+			try {
+				int[] keys = parseMacros();
+				for (int i = 0; i < keys.length; i++) {
+					robot.keyRelease(keys[i]);
+				}
+				wasMacroUsed = false;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if (pathfindReset) {
+			try {
+				isPathfinderInUse = false;
 				isKeyDown = false;
 				isSpaceDown = false;
 				inactivityTicker = 0;
 				robot.keyRelease(getForwardKey());
 				robot.keyRelease(getJumpKey());
-				reset = false;
+				pathfindReset = false;
 			}catch (Exception e) {}
 		}
-		if (isInUse && inactivityTicker == 0 && cooldown == 0)
+		if (isPathfinderInUse && inactivityTicker == 0 && cooldown == 0)
 			setYaw();
-		if (isInUse && !isKeyDown) {
+		if (isPathfinderInUse && !isKeyDown) {
 			try {
 				robot.keyPress(getForwardKey());
 			} catch (Exception e) {
@@ -63,7 +90,7 @@ public class TickHandler {
 			}
 			isKeyDown = true;
 		}
-		if (!isInUse && isKeyDown) {
+		if (!isPathfinderInUse && isKeyDown) {
 			try {
 				robot.keyRelease(getForwardKey());
 			} catch (Exception e) {
@@ -71,22 +98,22 @@ public class TickHandler {
 			}
 			isKeyDown = false;
 		}
-		if (isInUse) {
+		if (isPathfinderInUse) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			if (Minecraft.getMinecraft().currentScreen != null) {
-				markForReset();
+				markForPathfindReset();
 				return;
 			}
 			if (player != null) {
 				if (Math.abs(player.posX-X) < 1 && Math.abs(player.posZ-Z) < 1) {
-					markForReset();
+					markForPathfindReset();
 					player.addChatComponentMessage(new ChatComponentTranslation("chat.arrived"));
 					return;
 				}
 //				Logger.info(Math.abs(player.lastTickPosX-player.posX)+", "+Math.abs(player.lastTickPosZ-player.posZ));
 				if (Math.abs(player.lastTickPosX-player.posX) <= .01 && Math.abs(player.lastTickPosZ-player.posZ) <= .01 || ((Math.abs(player.lastTickPosX-player.posX) <= .1 && Math.abs(player.lastTickPosZ-player.posZ) <= .1) && inactivityTicker > 10)) {
 					if (inactivityTicker > 90) {
-						markForReset();
+						markForPathfindReset();
 						player.addChatComponentMessage(new ChatComponentTranslation("chat.failed"));
 						return;
 					}
@@ -139,6 +166,11 @@ public class TickHandler {
 		return key.getInt(null);
 	}
 	
+	public static int getKey(String character) throws IllegalAccessException, NoSuchFieldException {
+		Field key = KeyEvent.class.getField("VK_"+character.toUpperCase());
+		return key.getInt(null);
+	}
+	
 	private void setYaw() {
 		float yaw = 0;
 		int x = (int) Minecraft.getMinecraft().thePlayer.posX;
@@ -162,7 +194,15 @@ public class TickHandler {
 		Minecraft.getMinecraft().thePlayer.rotationYaw = yaw;
 	}
 	
-	public static void markForReset() {
-		reset = true;
+	public static void markForPathfindReset() {
+		pathfindReset = true;
+	}
+	
+	private int[] parseMacros() throws NoSuchFieldException, IllegalAccessException {
+		String[] split = macros.toLowerCase().split(String.valueOf((char)getKey(Keyboard.getKeyName(Keybindings.seperator.getKeyCode()))));
+		int[] keys = new int[split.length];
+		for (int i = 0; i < split.length; i++)
+			keys[i] = getKey(split[i]);
+		return keys;
 	}
 }

@@ -1,22 +1,24 @@
 package com.austinv11.autowalk.gui;
 
 import com.austinv11.autowalk.event.TickHandler;
+import com.austinv11.autowalk.init.Keybindings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.HashMap;
 
-public class GuiWaypoint extends GuiScreen {
+public class GuiMacro extends GuiScreen {
 	
 	public HashMap<String,GuiTextField> textFields = new HashMap<String,GuiTextField>();
 	
 	public int textY = height/2 + 3*25;
-	public int startTextX = (int) (width/3 + .75*25);
+	public int startTextX = (int) (width/2) + 5*25;
 	
 	public int buttonY = height/2 + 5*25;
 	public int startButtonX = (int) (width/2 + 4.5*25);
@@ -25,9 +27,7 @@ public class GuiWaypoint extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float renderPartialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		drawBackground(0);
-		mc.fontRenderer.drawString("X",  startTextX, textY-10, Color.WHITE.getRGB(), true);
-		mc.fontRenderer.drawString("Y",  startTextX+150, textY-10, Color.WHITE.getRGB(), true);
-		mc.fontRenderer.drawString("Z",  startTextX+300, textY-10, Color.WHITE.getRGB(), true);
+		mc.fontRenderer.drawString(StatCollector.translateToLocal("gui.macro").replace("@REPLACE@", Keyboard.getKeyName(Keybindings.seperator.getKeyCode()).toLowerCase()),  startTextX, textY-10, Color.WHITE.getRGB(), true);
 		super.drawScreen(mouseX, mouseY, renderPartialTicks);
 		for (GuiTextField text : textFields.values())
 			text.drawTextBox();
@@ -36,16 +36,15 @@ public class GuiWaypoint extends GuiScreen {
 	@Override
 	public void initGui() {
 		super.initGui();
-		textFields.put("x", getTextbox(startTextX, textY, 80, 20, TickHandler.X+""));
-		textFields.put("y", getTextbox(startTextX+150, textY, 80, 20, TickHandler.Y+""));
-		textFields.put("z", getTextbox(startTextX+300, textY, 80, 20, TickHandler.Z+""));
+		textFields.put("macros", getTextbox(startTextX, textY, 80, 20, TickHandler.macros));
 		buttonList.add(new GuiButton(0, startButtonX, buttonY, 80, 20, StatCollector.translateToLocal("gui.button.cancel")));
 		buttonList.add(new GuiButton(1, startButtonX+100, buttonY, 80, 20, StatCollector.translateToLocal("gui.button.ok")));
 	}
 	
 	private GuiTextField getTextbox(int x, int y, int height, int width, String startText) {
 		GuiTextField field = new GuiTextField(mc.fontRenderer, x, y, height, width);
-		field.setText(startText);
+		if (startText != null)
+			field.setText(startText);
 		return field;
 	}
 	
@@ -78,10 +77,7 @@ public class GuiWaypoint extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if (button.id == 1) {
-			TickHandler.isPathfinderInUse = true;
-			TickHandler.X = Integer.parseInt(textFields.get("x").getText());
-			TickHandler.Y = Integer.parseInt(textFields.get("y").getText());
-			TickHandler.Z = Integer.parseInt(textFields.get("z").getText());
+			TickHandler.macros = textFields.get("macros").getText();
 		}
 		Minecraft.getMinecraft().thePlayer.closeScreen();
 	}

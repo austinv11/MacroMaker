@@ -16,6 +16,8 @@ public class GuiHandler implements IGuiHandler {
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (ID == Reference.Guis.WAYPOINT.ordinal())
 			return new GuiWaypoint();
+		else if (ID == Reference.Guis.MACRO.ordinal())
+			return new GuiMacro();
 		return null;
 	}
 }

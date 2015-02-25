@@ -13,5 +13,9 @@ public class KeyHandler {
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		if (Keybindings.openGui.isPressed())
 			Minecraft.getMinecraft().thePlayer.openGui(AutoWalk.instance, Reference.Guis.WAYPOINT.ordinal(), Minecraft.getMinecraft().thePlayer.worldObj, (int)Minecraft.getMinecraft().thePlayer.posX, (int)Minecraft.getMinecraft().thePlayer.posY, (int)Minecraft.getMinecraft().thePlayer.posZ);
+		else if (Keybindings.macro.isPressed())
+			Minecraft.getMinecraft().thePlayer.openGui(AutoWalk.instance, Reference.Guis.MACRO.ordinal(), Minecraft.getMinecraft().thePlayer.worldObj, (int)Minecraft.getMinecraft().thePlayer.posX, (int)Minecraft.getMinecraft().thePlayer.posY, (int)Minecraft.getMinecraft().thePlayer.posZ);
+		else if (Keybindings.activateMacros.isPressed())
+			TickHandler.isMacroInUse = !TickHandler.isMacroInUse;
 	}
 }

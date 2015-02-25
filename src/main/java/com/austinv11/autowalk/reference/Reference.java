@@ -7,6 +7,6 @@ public class Reference {
 	public static final String GUI_FACTORY_CLASS = "com.austinv11.autowalk.client.gui.GUIFactory";
 	
 	public static enum Guis {
-		WAYPOINT;
+		WAYPOINT, MACRO;
 	}
 }

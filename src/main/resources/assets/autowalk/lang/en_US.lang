@@ -1,0 +1,15 @@
+#GUI
+gui.button.cancel=Cancel
+gui.button.ok=OK
+gui.macro=Enter the key(s) you want to be able to toggle (@REPLACE@-separated)
+
+#Chat Messages
+chat.failed=Pathfinding failed!
+chat.arrived=You have arrived at your destination!
+
+#Key Bindings
+key.categories.autowalk=Auto Walk
+key.openRouteGui=Open Route GUI
+key.macro=Open Macro Menu
+key.seperator=Separator Character
+key.activateMacros=Toggle Macros
