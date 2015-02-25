@@ -2,6 +2,7 @@ package com.austinv11.autowalk.gui;
 
 import com.austinv11.autowalk.event.TickHandler;
 import com.austinv11.autowalk.init.Keybindings;
+import com.austinv11.autowalk.reference.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,7 +12,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.HashMap;
+import java.util.*;
 
 public class GuiMacro extends GuiScreen {
 	
@@ -70,8 +71,18 @@ public class GuiMacro extends GuiScreen {
 	@Override
 	protected void keyTyped(char eventChar, int eventKey) {
 		super.keyTyped(eventChar, eventKey);
-		for (GuiTextField text : textFields.values())
+		boolean cont = false;
+		for (GuiTextField text : textFields.values()) {
 			text.textboxKeyTyped(eventChar, eventKey);
+			cont = text.isFocused() || cont;
+		}
+		if (cont)
+			if (Config.listenOnMacroScreen)
+				if (Keyboard.getEventKeyState()) {
+					String currentText = textFields.get("macros").getText();
+					currentText = (currentText != null && currentText.length() >= 1 ? currentText+"," : "")+Keyboard.getKeyName(Keyboard.getEventKey());
+					textFields.get("macros").setText(eliminateRepeats(currentText));
+				}
 	}
 	
 	@Override
@@ -80,5 +91,29 @@ public class GuiMacro extends GuiScreen {
 			TickHandler.macros = textFields.get("macros").getText();
 		}
 		Minecraft.getMinecraft().thePlayer.closeScreen();
+	}
+	
+	public static String eliminateRepeats(String text) {
+		try {
+			String seperator = String.valueOf((char) TickHandler.getKey(Keyboard.getKeyName(Keybindings.seperator.getKeyCode())));
+			if (!text.contains(seperator))
+				return text;
+			String[] split = text.split(seperator);
+			java.util.List<String> splitList = new ArrayList<String>();
+			for (String s : split)
+				if (!splitList.contains(s.toUpperCase()))
+					splitList.add(s.toUpperCase());
+			String newString = null;
+			for (String s2 : splitList) {
+				if (newString == null)
+					newString = s2;
+				else
+					newString = newString+seperator+s2;
+			}
+			return newString;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return text;
 	}
 }
