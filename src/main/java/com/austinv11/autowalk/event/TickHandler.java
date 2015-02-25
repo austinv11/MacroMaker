@@ -3,6 +3,7 @@ package com.austinv11.autowalk.event;
 import com.austinv11.autowalk.init.Keybindings;
 import com.austinv11.autowalk.utils.ReflectionUtil;
 import com.austinv11.autowalk.utils.Rotation;
+import com.austinv11.autowalk.utils.Utils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
@@ -13,8 +14,10 @@ import net.minecraft.util.ChatComponentTranslation;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public class TickHandler {
 	
@@ -52,9 +55,14 @@ public class TickHandler {
 		if (isMacroInUse && !wasMacroUsed) {
 			try {
 				if (macros != null) {
-					int[] keys = parseMacros();
+					Integer[][] pressed = parseMacros();
+					Integer[] keys = pressed[0];
+					Integer[] mouse = pressed[1];
 					for (int i = 0; i < keys.length; i++) {
 						robot.keyPress(keys[i]);
+					}
+					for (int i = 0; i < mouse.length; i++) {
+						robot.mousePress(InputEvent.getMaskForButton(mouse[i]));
 					}
 					wasMacroUsed = true;
 				}
@@ -63,9 +71,14 @@ public class TickHandler {
 			}
 		} else if (!isMacroInUse && wasMacroUsed) {
 			try {
-				int[] keys = parseMacros();
+				Integer[][] pressed = parseMacros();
+				Integer[] keys = pressed[0];
+				Integer[] mouse = pressed[1];
 				for (int i = 0; i < keys.length; i++) {
 					robot.keyRelease(keys[i]);
+				}
+				for (int i = 0; i < mouse.length; i++) {
+					robot.mouseRelease(InputEvent.getMaskForButton(mouse[i]));
 				}
 				wasMacroUsed = false;
 			} catch (Exception e) {
@@ -174,13 +187,27 @@ public class TickHandler {
 			Field key = KeyEvent.class.getField("VK_"+character.toUpperCase());
 			return key.getInt(null);
 		} else {//Special cases
+			String characterUp = character.toUpperCase();
 			int key = 0;
-			if (character.toUpperCase().contains("SHIFT"))
+			if (characterUp.contains("SHIFT"))
 				key = KeyEvent.VK_SHIFT;
-			else if (character.toUpperCase().contains("META"))
+			else if (characterUp.contains("META"))
 				key = KeyEvent.VK_META;
 			return key;
 		}
+	}
+	
+	public static int getMouse(String button) {
+		String num = button.toUpperCase().replace("BUTTON", "");
+		switch (Integer.valueOf(num)) {
+			case 0:
+				return 1;
+			case 1:
+				return 3;
+			case 2:
+				return 2;
+		}
+		return 0;
 	}
 	
 	private void setYaw() {
@@ -210,11 +237,15 @@ public class TickHandler {
 		pathfindReset = true;
 	}
 	
-	private int[] parseMacros() throws NoSuchFieldException, IllegalAccessException {
+	private Integer[][] parseMacros() throws NoSuchFieldException, IllegalAccessException {
 		String[] split = macros.toLowerCase().split(String.valueOf((char)getKey(Keyboard.getKeyName(Keybindings.seperator.getKeyCode()))));
-		int[] keys = new int[split.length];
+		ArrayList<Integer> keys = new ArrayList<Integer>();
+		ArrayList<Integer> mouse = new ArrayList<Integer>();
 		for (int i = 0; i < split.length; i++)
-			keys[i] = getKey(split[i]);
-		return keys;
+			if (!split[i].toUpperCase().contains("BUTTON"))
+				keys.add(getKey(split[i]));
+			else
+				mouse.add(getMouse(split[i]));
+		return new Integer[][]{Utils.getIntArrayFromList(keys), Utils.getIntArrayFromList(mouse)};
 	}
 }

@@ -9,6 +9,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 public class KeyHandler {
 	
@@ -24,6 +25,18 @@ public class KeyHandler {
 			if (Keyboard.getEventKeyState())
 				try {
 					KeyOverlay.keys.offer(new Object[]{Keyboard.getKeyName(Keyboard.getEventKey()).toUpperCase(), KeyOverlay.KEY_LIFE_LENGTH});
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onMouseInput(InputEvent.MouseInputEvent event) {
+		if (Config.showKeysOnHUD) {
+			if (Mouse.getEventButtonState())
+				try {
+					KeyOverlay.keys.offer(new Object[]{Mouse.getButtonName(Mouse.getEventButton()).toUpperCase(), KeyOverlay.KEY_LIFE_LENGTH});
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

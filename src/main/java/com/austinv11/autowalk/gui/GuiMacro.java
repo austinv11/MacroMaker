@@ -9,9 +9,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class GuiMacro extends GuiScreen {
@@ -23,6 +25,8 @@ public class GuiMacro extends GuiScreen {
 	
 	public int buttonY = height/2 + 5*25;
 	public int startButtonX = (int) (width/2 + 4.5*25);
+	
+	private Field selectedButtons = null;
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float renderPartialTicks) {
@@ -37,6 +41,14 @@ public class GuiMacro extends GuiScreen {
 	@Override
 	public void initGui() {
 		super.initGui();
+		if (selectedButtons == null) {
+			try {
+				selectedButtons = GuiScreen.class.getDeclaredField("selectedButton");
+				selectedButtons.setAccessible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		textFields.put("macros", getTextbox(startTextX, textY, 320, 20, TickHandler.macros));
 		buttonList.add(new GuiButton(0, startButtonX, buttonY, 80, 20, StatCollector.translateToLocal("gui.button.cancel")));
 		buttonList.add(new GuiButton(1, startButtonX+100, buttonY, 80, 20, StatCollector.translateToLocal("gui.button.ok")));
@@ -57,8 +69,22 @@ public class GuiMacro extends GuiScreen {
 	@Override
 	protected void mouseClicked(int x, int y, int mouseEvent) {
 		super.mouseClicked(x, y, mouseEvent);
-		for (GuiTextField text : textFields.values())
+		boolean cont = false;
+		try {
+			cont = selectedButtons.get(this) == null;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		for (GuiTextField text : textFields.values()) {
 			text.mouseClicked(x, y, mouseEvent);
+			cont = !text.isFocused() || cont;
+		}
+		if (cont)
+			if (Mouse.getEventButtonState()) {
+				String currentText = textFields.get("macros").getText();
+				currentText = (currentText != null && currentText.length() >= 1 ? currentText+"," : "")+Mouse.getButtonName(Mouse.getEventButton());
+				textFields.get("macros").setText(eliminateRepeats(currentText));
+			}
 	}
 	
 	@Override
@@ -76,8 +102,8 @@ public class GuiMacro extends GuiScreen {
 			text.textboxKeyTyped(eventChar, eventKey);
 			cont = !text.isFocused() || cont;
 		}
-		if (cont)
-			if (Config.listenOnMacroScreen)
+		if (Config.listenOnMacroScreen)
+			if (cont)
 				if (Keyboard.getEventKeyState()) {
 					String currentText = textFields.get("macros").getText();
 					currentText = (currentText != null && currentText.length() >= 1 ? currentText+"," : "")+Keyboard.getKeyName(Keyboard.getEventKey());
