@@ -31,6 +31,7 @@ public class ConfigurationHandler {
 			config.load();
 			Config.showKeysOnHUD = config.get("Misc", "showKeysOnHUD", false, "If enabled, all pressed keys will be overlaid on the in game HUD").getBoolean(false);
 			Config.listenOnMacroScreen = config.get("Misc", "listenOnMacroScreen", true, "When enabled, keys will be listened for on the macro configuration screen").getBoolean(true);
+			Config.useMacrosOnAllScreens = config.get("Misc", "useMacrosOnAllScreens", false, "Enabling this allows macros to be used within guis. WARNING: Enabling this may cause some weird effects").getBoolean(false);
 		}catch (Exception e){//Log exception
 			Logger.warn("Config exception!");
 			Logger.warn(e.getStackTrace());

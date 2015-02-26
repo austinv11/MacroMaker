@@ -1,6 +1,7 @@
 package com.austinv11.autowalk.event;
 
 import com.austinv11.autowalk.init.Keybindings;
+import com.austinv11.autowalk.reference.Config;
 import com.austinv11.autowalk.utils.ReflectionUtil;
 import com.austinv11.autowalk.utils.Rotation;
 import com.austinv11.autowalk.utils.Utils;
@@ -52,24 +53,43 @@ public class TickHandler {
 	
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
-		if (isMacroInUse && !wasMacroUsed) {
-			try {
-				if (macros != null) {
+		if (Minecraft.getMinecraft().currentScreen == null || Config.useMacrosOnAllScreens) {
+			if (isMacroInUse && !wasMacroUsed) {
+				try {
+					if (macros != null) {
+						Integer[][] pressed = parseMacros();
+						Integer[] keys = pressed[0];
+						Integer[] mouse = pressed[1];
+						for (int i = 0; i < keys.length; i++) {
+							robot.keyPress(keys[i]);
+						}
+						for (int i = 0; i < mouse.length; i++) {
+							robot.mousePress(InputEvent.getMaskForButton(mouse[i]));
+						}
+						wasMacroUsed = true;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else if (!isMacroInUse && wasMacroUsed) {
+				try {
 					Integer[][] pressed = parseMacros();
 					Integer[] keys = pressed[0];
 					Integer[] mouse = pressed[1];
 					for (int i = 0; i < keys.length; i++) {
-						robot.keyPress(keys[i]);
+						robot.keyRelease(keys[i]);
 					}
 					for (int i = 0; i < mouse.length; i++) {
-						robot.mousePress(InputEvent.getMaskForButton(mouse[i]));
+						robot.mouseRelease(InputEvent.getMaskForButton(mouse[i]));
 					}
-					wasMacroUsed = true;
+					wasMacroUsed = false;
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
-		} else if (!isMacroInUse && wasMacroUsed) {
+		} else {
+			isMacroInUse = false;
+			wasMacroUsed = false;
 			try {
 				Integer[][] pressed = parseMacros();
 				Integer[] keys = pressed[0];

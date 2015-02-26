@@ -76,8 +76,10 @@ public class GuiMacro extends GuiScreen {
 			e.printStackTrace();
 		}
 		for (GuiTextField text : textFields.values()) {
+			boolean isFocused = text.isFocused();
 			text.mouseClicked(x, y, mouseEvent);
-			cont = !text.isFocused() || cont;
+			isFocused = text.isFocused() || isFocused;
+			cont = !isFocused || cont;
 		}
 		if (cont)
 			if (Mouse.getEventButtonState()) {
