@@ -1,6 +1,7 @@
 package com.austinv11.autowalk.gui;
 
 import com.austinv11.autowalk.event.TickHandler;
+import com.austinv11.autowalk.reference.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -24,7 +25,10 @@ public class GuiWaypoint extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float renderPartialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		drawBackground(0);
+		if (Config.useTransparentBackground)
+			drawDefaultBackground();
+		else
+			drawBackground(0);
 		mc.fontRenderer.drawString("X",  startTextX, textY-10, Color.WHITE.getRGB(), true);
 		mc.fontRenderer.drawString("Y",  startTextX+150, textY-10, Color.WHITE.getRGB(), true);
 		mc.fontRenderer.drawString("Z",  startTextX+300, textY-10, Color.WHITE.getRGB(), true);

@@ -31,7 +31,10 @@ public class GuiMacro extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float renderPartialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		drawBackground(0);
+		if (Config.useTransparentBackground)
+			drawDefaultBackground();
+		else
+			drawBackground(0);
 		mc.fontRenderer.drawString(StatCollector.translateToLocal("gui.macro").replace("@REPLACE@", Keyboard.getKeyName(Keybindings.seperator.getKeyCode()).toLowerCase()),  startTextX, textY-10, Color.WHITE.getRGB(), true);
 		super.drawScreen(mouseX, mouseY, renderPartialTicks);
 		for (GuiTextField text : textFields.values())

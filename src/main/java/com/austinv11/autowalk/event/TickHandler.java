@@ -87,22 +87,24 @@ public class TickHandler {
 					e.printStackTrace();
 				}
 			}
-		} else {
-			isMacroInUse = false;
-			wasMacroUsed = false;
-			try {
-				Integer[][] pressed = parseMacros();
-				Integer[] keys = pressed[0];
-				Integer[] mouse = pressed[1];
-				for (int i = 0; i < keys.length; i++) {
-					robot.keyRelease(keys[i]);
-				}
-				for (int i = 0; i < mouse.length; i++) {
-					robot.mouseRelease(InputEvent.getMaskForButton(mouse[i]));
-				}
+		} else if (isMacroInUse || wasMacroUsed) {
+			if (macros != null) {
+				isMacroInUse = false;
 				wasMacroUsed = false;
-			} catch (Exception e) {
-				e.printStackTrace();
+				try {
+					Integer[][] pressed = parseMacros();
+					Integer[] keys = pressed[0];
+					Integer[] mouse = pressed[1];
+					for (int i = 0; i < keys.length; i++) {
+						robot.keyRelease(keys[i]);
+					}
+					for (int i = 0; i < mouse.length; i++) {
+						robot.mouseRelease(InputEvent.getMaskForButton(mouse[i]));
+					}
+					wasMacroUsed = false;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		if (pathfindReset) {
@@ -203,17 +205,16 @@ public class TickHandler {
 	}
 	
 	public static int getKey(String character) throws IllegalAccessException, NoSuchFieldException {
+		String characterUp = character.toUpperCase();
+		if (characterUp.contains("SHIFT"))
+			return KeyEvent.VK_SHIFT;
+		else if (characterUp.contains("META"))
+			returnKeyEvent.VK_META;
 		if (ReflectionUtil.doesClassHaveDeclaredField(KeyEvent.class, "VK_"+character.toUpperCase())) {
 			Field key = KeyEvent.class.getField("VK_"+character.toUpperCase());
 			return key.getInt(null);
 		} else {//Special cases
-			String characterUp = character.toUpperCase();
-			int key = 0;
-			if (characterUp.contains("SHIFT"))
-				key = KeyEvent.VK_SHIFT;
-			else if (characterUp.contains("META"))
-				key = KeyEvent.VK_META;
-			return key;
+			return 0;
 		}
 	}
 	
