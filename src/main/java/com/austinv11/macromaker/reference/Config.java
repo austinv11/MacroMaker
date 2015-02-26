@@ -1,4 +1,4 @@
-package com.austinv11.autowalk.reference;
+package com.austinv11.macromaker.reference;
 
 public class Config {
 	public static boolean showKeysOnHUD = false;

@@ -1,6 +1,6 @@
-package com.austinv11.autowalk.gui;
+package com.austinv11.macromaker.gui;
 
-import com.austinv11.autowalk.reference.Config;
+import com.austinv11.macromaker.reference.Config;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;

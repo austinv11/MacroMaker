@@ -1,4 +1,4 @@
-package com.austinv11.autowalk.utils;
+package com.austinv11.macromaker.utils;
 
 import java.lang.reflect.Field;
 

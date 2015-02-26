@@ -1,6 +1,6 @@
-package com.austinv11.autowalk.gui;
+package com.austinv11.macromaker.gui;
 
-import com.austinv11.autowalk.reference.Reference;
+import com.austinv11.macromaker.reference.Reference;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;

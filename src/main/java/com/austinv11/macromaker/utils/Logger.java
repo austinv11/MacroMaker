@@ -1,6 +1,6 @@
-package com.austinv11.autowalk.utils;
+package com.austinv11.macromaker.utils;
 
-import com.austinv11.autowalk.reference.Reference;
+import com.austinv11.macromaker.reference.Reference;
 import cpw.mods.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 

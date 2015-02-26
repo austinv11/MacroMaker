@@ -1,9 +1,9 @@
 {
   "modListVersion": 2,
   "modList": [{
-    "modid": "AutoWalk",
-    "name": "Auto Walk",
-    "description": "A less cheaty way of fast travel",
+    "modid": "MacroMaker",
+    "name": "Macro Maker",
+    "description": "A mod for automating simple input tasks",
     "version": "1.0.0",
     "mcversion": "1.7.10",
     "url": "austinv11.com",

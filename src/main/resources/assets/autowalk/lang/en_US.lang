@@ -8,7 +8,7 @@ chat.failed=Pathfinding failed!
 chat.arrived=You have arrived at your destination!
 
 #Key Bindings
-key.categories.autowalk=Auto Walk
+key.categories.macromaker=Auto Walk
 key.openRouteGui=Open Route GUI
 key.macro=Open Macro Menu
 key.seperator=Separator Character

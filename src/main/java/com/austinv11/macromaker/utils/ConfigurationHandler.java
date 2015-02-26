@@ -1,7 +1,7 @@
-package com.austinv11.autowalk.utils;
+package com.austinv11.macromaker.utils;
 
-import com.austinv11.autowalk.reference.Config;
-import com.austinv11.autowalk.reference.Reference;
+import com.austinv11.macromaker.reference.Config;
+import com.austinv11.macromaker.reference.Reference;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;

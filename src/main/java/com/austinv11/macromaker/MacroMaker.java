@@ -1,12 +1,12 @@
-package com.austinv11.autowalk;
+package com.austinv11.macromaker;
 
-import com.austinv11.autowalk.event.KeyHandler;
-import com.austinv11.autowalk.event.TickHandler;
-import com.austinv11.autowalk.gui.GuiHandler;
-import com.austinv11.autowalk.gui.KeyOverlay;
-import com.austinv11.autowalk.init.Keybindings;
-import com.austinv11.autowalk.reference.Reference;
-import com.austinv11.autowalk.utils.ConfigurationHandler;
+import com.austinv11.macromaker.event.KeyHandler;
+import com.austinv11.macromaker.event.TickHandler;
+import com.austinv11.macromaker.gui.GuiHandler;
+import com.austinv11.macromaker.gui.KeyOverlay;
+import com.austinv11.macromaker.init.Keybindings;
+import com.austinv11.macromaker.reference.Reference;
+import com.austinv11.macromaker.utils.ConfigurationHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -16,10 +16,10 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid= Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION/*, guiFactory = Reference.GUI_FACTORY_CLASS*/)
-public class AutoWalk {
+public class MacroMaker {
 	
 	@Mod.Instance(Reference.MOD_ID)
-	public static AutoWalk instance;
+	public static MacroMaker instance;
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

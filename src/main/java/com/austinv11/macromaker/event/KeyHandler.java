@@ -1,10 +1,10 @@
-package com.austinv11.autowalk.event;
+package com.austinv11.macromaker.event;
 
-import com.austinv11.autowalk.AutoWalk;
-import com.austinv11.autowalk.gui.KeyOverlay;
-import com.austinv11.autowalk.init.Keybindings;
-import com.austinv11.autowalk.reference.Config;
-import com.austinv11.autowalk.reference.Reference;
+import com.austinv11.macromaker.MacroMaker;
+import com.austinv11.macromaker.gui.KeyOverlay;
+import com.austinv11.macromaker.init.Keybindings;
+import com.austinv11.macromaker.reference.Config;
+import com.austinv11.macromaker.reference.Reference;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.client.Minecraft;
@@ -16,9 +16,9 @@ public class KeyHandler {
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		if (Keybindings.openGui.isPressed())
-			Minecraft.getMinecraft().thePlayer.openGui(AutoWalk.instance, Reference.Guis.WAYPOINT.ordinal(), Minecraft.getMinecraft().thePlayer.worldObj, (int)Minecraft.getMinecraft().thePlayer.posX, (int)Minecraft.getMinecraft().thePlayer.posY, (int)Minecraft.getMinecraft().thePlayer.posZ);
+			Minecraft.getMinecraft().thePlayer.openGui(MacroMaker.instance, Reference.Guis.WAYPOINT.ordinal(), Minecraft.getMinecraft().thePlayer.worldObj, (int)Minecraft.getMinecraft().thePlayer.posX, (int)Minecraft.getMinecraft().thePlayer.posY, (int)Minecraft.getMinecraft().thePlayer.posZ);
 		else if (Keybindings.macro.isPressed())
-			Minecraft.getMinecraft().thePlayer.openGui(AutoWalk.instance, Reference.Guis.MACRO.ordinal(), Minecraft.getMinecraft().thePlayer.worldObj, (int)Minecraft.getMinecraft().thePlayer.posX, (int)Minecraft.getMinecraft().thePlayer.posY, (int)Minecraft.getMinecraft().thePlayer.posZ);
+			Minecraft.getMinecraft().thePlayer.openGui(MacroMaker.instance, Reference.Guis.MACRO.ordinal(), Minecraft.getMinecraft().thePlayer.worldObj, (int)Minecraft.getMinecraft().thePlayer.posX, (int)Minecraft.getMinecraft().thePlayer.posY, (int)Minecraft.getMinecraft().thePlayer.posZ);
 		else if (Keybindings.activateMacros.isPressed())
 			TickHandler.isMacroInUse = !TickHandler.isMacroInUse;
 		if (Config.showKeysOnHUD) {

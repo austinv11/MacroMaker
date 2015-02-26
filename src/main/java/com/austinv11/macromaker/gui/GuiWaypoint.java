@@ -1,7 +1,7 @@
-package com.austinv11.autowalk.gui;
+package com.austinv11.macromaker.gui;
 
-import com.austinv11.autowalk.event.TickHandler;
-import com.austinv11.autowalk.reference.Config;
+import com.austinv11.macromaker.event.TickHandler;
+import com.austinv11.macromaker.reference.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

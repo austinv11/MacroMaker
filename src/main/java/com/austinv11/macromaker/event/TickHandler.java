@@ -1,10 +1,10 @@
-package com.austinv11.autowalk.event;
+package com.austinv11.macromaker.event;
 
-import com.austinv11.autowalk.init.Keybindings;
-import com.austinv11.autowalk.reference.Config;
-import com.austinv11.autowalk.utils.ReflectionUtil;
-import com.austinv11.autowalk.utils.Rotation;
-import com.austinv11.autowalk.utils.Utils;
+import com.austinv11.macromaker.init.Keybindings;
+import com.austinv11.macromaker.reference.Config;
+import com.austinv11.macromaker.utils.ReflectionUtil;
+import com.austinv11.macromaker.utils.Rotation;
+import com.austinv11.macromaker.utils.Utils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
@@ -209,7 +209,7 @@ public class TickHandler {
 		if (characterUp.contains("SHIFT"))
 			return KeyEvent.VK_SHIFT;
 		else if (characterUp.contains("META"))
-			returnKeyEvent.VK_META;
+			return KeyEvent.VK_META;
 		if (ReflectionUtil.doesClassHaveDeclaredField(KeyEvent.class, "VK_"+character.toUpperCase())) {
 			Field key = KeyEvent.class.getField("VK_"+character.toUpperCase());
 			return key.getInt(null);
